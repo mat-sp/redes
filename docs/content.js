@@ -88,31 +88,31 @@ window.HOME_STEPS = [
 ];
 window.CLASS_STEPS = [
   {
-    "title": "Entra en el grupo",
-    "text": "Un miembro crea el grupo y comparte el código con los demás. Cada uno entra desde su ordenador real, con nombre y apellido. El grupo necesita de 2 a 5 miembros."
+    "title": "Entra con todo tu grupo",
+    "text": "Quien crea la sala comparte el código. Todos entran, comprueban su portátil y conocen el orden de los turnos."
   },
   {
-    "title": "Conecta los portátiles a X49",
-    "text": "Desde el icono wifi del escritorio, selecciona X49, escribe AulaX49! y pulsa Conectar. Revisa las direcciones automáticas y pulsa Comprobar conexión en Configuración."
+    "title": "Conecta tu portátil a X49",
+    "text": "Cada integrante conecta su wifi virtual, revisa las direcciones automáticas y pulsa Comprobar conexión."
   },
   {
-    "title": "Crea y comparte una carpeta",
-    "text": "En Explorador → Documentos crea una carpeta, ábrela y crea un archivo .txt con vuestros nombres. Guarda. En Compartir activa el recurso inicialmente con permiso de lectura. Otro miembro abre Red → tu portátil → carpeta."
+    "title": "Abrimos el primer recurso compartido",
+    "text": "Quien creó la sala crea una carpeta y un archivo. Comparte con Lectura. Todos los demás abren el archivo por Red."
   },
   {
-    "title": "Comprueba el permiso de lectura",
-    "text": "Desde otro portátil abre el archivo e intenta modificarlo. Comprueba que el permiso lo impide. El propietario cambia el recurso a Lectura y escritura. Actualiza la carpeta remota."
+    "title": "Probamos los permisos entre todos",
+    "text": "Cada compañero intenta Guardar con solo lectura. Después, quien creó el recurso concede Lectura y escritura."
   },
   {
-    "title": "Editad el mismo recurso por turnos",
-    "text": "Una persona añade una frase al archivo remoto y guarda. Su propietario vuelve a abrirlo, comprueba la frase, añade otra y guarda. Un tercer miembro, si lo hay, también aporta una frase. Todos deben editar algún archivo compartido de otro portátil."
+    "title": "Todos editamos el primer archivo",
+    "text": "Los compañeros añaden una frase uno a uno. Al terminar todos, quien creó el archivo guarda una respuesta final."
   },
   {
-    "title": "Intercambia, copia e imprime",
-    "text": "Otro miembro comparte su carpeta y los demás aportan. Copiad un archivo remoto a vuestro portátil, cambiad el original y comparadlo con la copia. Probad también la impresora USB compartida."
+    "title": "Todos compartimos, copiamos e imprimimos",
+    "text": "Todos tienen su carpeta y archivo. Cada uno edita el del siguiente compañero, guarda una copia, la compara tras cambiar el original y prueba su impresora."
   },
   {
-    "title": "Investiga una interrupción y entrega",
-    "text": "Apaga virtualmente el portátil que ofrece la carpeta, comprueba el corte desde otro equipo y recupera la conexión. Al final, haced el test común y descargad un PDF del grupo."
+    "title": "Apagamos por turnos y entregamos",
+    "text": "Cada integrante apaga su portátil virtual mientras el compañero anterior intenta entrar. Se recupera antes de pasar al siguiente. Al final, test y PDF común."
   }
 ];

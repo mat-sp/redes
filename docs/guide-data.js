@@ -328,39 +328,33 @@ window.HOME_GUIDES = [
 ];
 window.CLASS_GUIDES = [
   {
-    "goal": "Que cada integrante tenga su propio portátil virtual dentro del mismo grupo.",
-    "expected": "En el grupo aparecerán entre dos y cinco tarjetas, con nombres y portátiles diferentes.",
-    "help": "Solo una persona crea el grupo. Las demás usan su código. Entrar a la misma web no os mete automáticamente en el mismo grupo.",
+    "goal": "Reunir a todos los integrantes y conocer el orden de los turnos.",
+    "expected": "Entre 2 y 5 personas, cada una con su propio portátil virtual.",
+    "help": "Solo una persona crea el grupo. Esperad a que todos entren antes de comenzar. Quien crea la sala realizará la primera demostración; después todos harán las mismas tareas.",
     "steps": [
       [
-        "Repartid los papeles",
-        "Elegid a una persona <b>A</b>, que creará el grupo. Los demás serán B, C… Cada integrante abrirá esta web en su propio portátil real y escribirá su nombre y apellido.",
-        "identity",
-        "Revisar mi nombre"
-      ],
-      [
-        "Cread una sola sala",
-        "Antes de entrar, A pulsa <b>Crear grupo</b>. Cuando vea el código, pulsa <b>Copiar</b> y se lo pasa a los demás. Si tú no eres A, espera ese código: no crees otra sala.",
+        "Entrad todos en una sola sala",
+        "Quien crea el grupo comparte el código de cinco caracteres. Los demás entran con su nombre y apellido desde sus propios ordenadores.",
         "copy-code",
-        "Copiar el código de esta sala"
+        "Copiar el código"
       ],
       [
-        "Los demás entran con el código",
-        "B, C… pegan el código completo en <b>Código del grupo</b> y pulsan <b>Entrar con mi nombre</b>. Cada uno debe ver su tarjeta marcada con <b>tú</b>.",
+        "Identificad a quien empieza",
+        "La primera persona en crear carpeta y archivo será <b>{{creator}}</b>, que ha creado el grupo. Su portátil es <b>{{creator_pc}}</b>.",
         "members",
-        "Ver quién ha entrado"
+        "Ver los integrantes"
       ],
       [
-        "Identificad vuestros portátiles",
-        "Cada uno verá un <b>escritorio de Windows 11 simulado</b> con su nombre y su <b>PORTATIL-1</b>, <b>PORTATIL-2</b>… En <b>Mi grupo y la red X49</b> podéis ver a todos. Acordad quién compartirá primero una carpeta: será A.",
+        "Acordad el orden de los turnos",
+        "Este es el orden de vuestro grupo: <b>{{order}}</b>. En cada ronda participa todo el mundo. Después del último, se vuelve al primero.",
         "members",
-        "Ver los portátiles"
+        "Ver el orden"
       ],
       [
         "Comprueba que estáis todos",
-        "Despliega <b>Mi grupo y la red X49</b>. Cada nombre debe tener un portátil distinto. Cuando aparezcáis los 2–5 integrantes, pulsa <b>Comprobar este paso</b>. El test se responde al final.",
+        "Cada nombre debe tener un portátil distinto. Cuando hayan entrado todos los integrantes de vuestro grupo, pulsa <b>Comprobar este paso</b>.",
         "members",
-        "Ver los integrantes"
+        "Revisar el grupo"
       ]
     ]
   },
@@ -414,235 +408,217 @@ window.CLASS_GUIDES = [
     ]
   },
   {
-    "goal": "Que A cree un archivo y los compañeros lo abran desde otro portátil.",
-    "expected": "A verá su archivo dentro de Documentos. B lo abrirá entrando por Red en el portátil de A, con permiso de solo lectura.",
-    "help": "Los archivos se guardan al pulsar Guardar en el Bloc de notas. Activar la carpeta compartida no crea ni guarda un archivo automáticamente.",
+    "goal": "Quien creó el grupo crea el primer recurso. Todos los demás lo abren desde su portátil.",
+    "expected": "El primer archivo está guardado y cada compañero lo ha abierto por Red.",
+    "help": "Durante esta primera demostración crea la carpeta únicamente quien abrió la sala. Los demás tendrán su propio turno para crear y compartir después. Abrir por Red permite acceder al archivo del compañero.",
     "steps": [
       [
-        "A crea una carpeta en su portátil",
-        "En el escritorio de A, pulsa <b>Documentos</b> (o abre el <b>Explorador</b> desde la barra de tareas y entra en Documentos). Pulsa <b>Nueva carpeta</b>, escribe <code>Equipo_X49</code> y pulsa <b>Crear en Documentos</b>. La carpeta se abrirá.",
+        "Quien creó la sala crea la primera carpeta",
+        "<b>{{creator}}</b> abre <b>Documentos → Nueva carpeta</b>. Puede llamarla <code>{{creator_folder}}</code> y pulsa <b>Crear en Documentos</b>. Los demás observan los pasos para repetirlos después.",
         "documents",
-        "Abrir mis Documentos"
+        "Abrir Documentos"
       ],
       [
-        "A crea el archivo de texto",
-        "Dentro de la carpeta, A pulsa <b>Nuevo archivo de texto</b>. Puede dejar <code>Equipo_X49.txt</code> y pulsa <b>Abrir en Bloc de notas</b>.",
+        "La misma persona crea y guarda el archivo",
+        "Dentro de esa carpeta, <b>{{creator}}</b> pulsa <b>Nuevo archivo de texto</b>, escribe un nombre acabado en <code>.txt</code> y abre Bloc de notas. Escribe los nombres del grupo, pulsa <b>Guardar</b> y comprueba que aparece versión 1.",
         "explorer",
         "Abrir el Explorador"
       ],
       [
-        "A escribe y guarda",
-        "En el Bloc de notas, A escribe los nombres de los integrantes y una frase, por ejemplo «Este archivo está en el portátil de A». Pulsa <b>Guardar</b>. Comprueba que aparece <b>versión 1</b>.",
-        "editor",
-        "Volver al Bloc de notas"
-      ],
-      [
-        "A activa el uso compartido",
-        "A vuelve al <b>Explorador</b> pulsando su icono de carpeta en la barra inferior. Dentro de su carpeta, pulsa <b>Compartir y permisos</b>. Marca <b>Compartir esta carpeta con el grupo</b>, deja <b>Lectura</b> y pulsa <b>Aplicar permisos</b>.",
+        "Comparte inicialmente con permiso de lectura",
+        "<b>{{creator}}</b> vuelve al Explorador, pulsa <b>Compartir y permisos</b>, marca <b>Compartir esta carpeta con el grupo</b>, deja <b>Lectura</b> y pulsa <b>Aplicar permisos</b>.",
         "explorer",
-        "Volver a la carpeta para compartir"
+        "Ver la carpeta abierta"
       ],
       [
-        "B busca el equipo de A",
-        "En su propio escritorio, B pulsa <b>Red</b> (o entra desde el lateral del Explorador). Pulsa el equipo <b>PORTATIL-n</b> que tenga el nombre de A. Verá la carpeta <code>Equipo_X49</code>.",
+        "Todos los demás abren la carpeta y el archivo",
+        "Cada compañero entra desde su escritorio en <b>Red → {{creator_pc}} → {{creator_folder}}</b> y pulsa <b>Abrir</b> junto al archivo. Todos deben leer el texto y ver que está en solo lectura.",
         "network",
-        "Abrir Red en mi portátil"
+        "Buscar la primera carpeta"
       ],
       [
-        "B abre el archivo remoto",
-        "B pulsa la carpeta y después <b>Abrir</b>, junto a <code>Equipo_X49.txt</code>. Debe leer el texto que escribió A. En la ventana aparecerá <b>Archivo de otro portátil</b> y <b>solo lectura</b>.",
-        "network",
-        "Buscar el recurso del compañero"
-      ],
-      [
-        "Comprueba el acceso a la carpeta",
-        "Cuando B haya abierto la carpeta de A por <b>Red</b> y vea el archivo, pulsa <b>Comprobar este paso</b>. No copies la carpeta a Documentos.",
-        "explorer",
-        "Volver a la carpeta abierta"
-      ]
-    ]
-  },
-  {
-    "goal": "Probar qué permite la lectura y cómo se concede la escritura.",
-    "expected": "El intento de guardar de B se denegará con Lectura. Después de cambiar el permiso y volver a abrir el archivo, B podrá editarlo.",
-    "help": "El propietario puede editar su propia carpeta aunque la comparta como Lectura. La denegación se prueba desde otro portátil. Tras cambiar el permiso, vuelve a abrir el archivo: una ventana ya abierta puede seguir mostrando solo lectura.",
-    "steps": [
-      [
-        "B prueba a guardar desde otro portátil",
-        "B abre el archivo de A desde <b>Red</b>. El texto está en <b>solo lectura</b>. Pulsa <b>Guardar</b>, aunque no puedas escribir, para comprobar la denegación.",
-        "network",
-        "Buscar la carpeta de otro portátil"
-      ],
-      [
-        "Leed el aviso de acceso denegado",
-        "Debe aparecer <b>Acceso denegado: el recurso solo permite lectura</b>. No es un fallo del wifi: puedes leer el contenido, pero no cambiarlo.",
-        "editor",
-        "Ver el archivo abierto"
-      ],
-      [
-        "A concede permiso de escritura",
-        "En el portátil de A: <b>Explorador → su carpeta → Compartir y permisos</b>. En <b>Permiso para los compañeros</b> elige <b>Lectura y escritura</b> y pulsa <b>Aplicar permisos</b>.",
-        "explorer",
-        "Abrir mi carpeta para revisar permisos"
-      ],
-      [
-        "B actualiza la carpeta y reabre el archivo",
-        "En el portátil de B: vuelve a <b>Explorador</b>, pulsa <b>Actualizar</b> dentro de la carpeta remota y después <b>Abrir</b> junto al archivo. Ya no debe indicar solo lectura.",
-        "explorer",
-        "Volver al Explorador"
-      ],
-      [
-        "Comprueba los permisos",
-        "Primero debe haberse denegado Guardar desde B con Lectura. Después A debe haber aplicado <b>Lectura y escritura</b>. Pulsa <b>Comprobar este paso</b>.",
-        "explorer",
-        "Volver a la carpeta"
-      ]
-    ]
-  },
-  {
-    "goal": "Guardar aportaciones desde varios portátiles y comprobarlas en el archivo original.",
-    "expected": "Cada guardado aumentará la versión. El Explorador y los archivos abiertos sin cambios pendientes recibirán las aportaciones de los compañeros automáticamente.",
-    "help": "Trabajad por turnos. Los cambios se envían al pulsar Guardar. Un archivo abierto sin borrador recibe automáticamente la nueva versión. Si estabas escribiendo, tu borrador se conserva: copia tu aportación, pulsa Cargar última versión y combínala antes de guardar.",
-    "steps": [
-      [
-        "B añade una frase al archivo de A",
-        "B abre <code>Equipo_X49.txt</code> en la carpeta compartida de A, escribe una línea con su nombre y pulsa <b>Guardar</b>. Revisa que el número de versión aumenta.",
-        "network",
-        "Abrir el recurso remoto"
-      ],
-      [
-        "A ve llegar el cambio de B",
-        "A vuelve al <b>Explorador</b> con su icono en la barra: verá aumentar la versión sin recargar la página. Abre el archivo para leer la frase de B. Si lo tenía abierto en Bloc de notas sin cambios pendientes, el contenido se actualizará automáticamente.",
-        "explorer",
-        "Volver al Explorador para actualizar"
-      ],
-      [
-        "A responde dentro del mismo archivo",
-        "A añade otra línea, por ejemplo «He leído la aportación de B», y pulsa <b>Guardar</b>. Este guardado debe ocurrir después del de B.",
-        "editor",
-        "Volver al archivo abierto"
-      ],
-      [
-        "C, D y E aportan, si los hay",
-        "C, D y E, si los hay, abren <b>Red → portátil de A → Equipo_X49 → Equipo_X49.txt</b>. Por turnos, cada uno añade una línea con su nombre y pulsa <b>Guardar</b>. Antes del siguiente turno, comprobad que todos ven la última versión.",
-        "network",
-        "Abrir Red para mi turno"
-      ],
-      [
-        "Revisad el resultado de los turnos",
-        "A debe haber guardado una respuesta después de la aportación de B. C, D y E, si los hay, añaden también sus frases por turnos. En el próximo paso A escribirá en la carpeta de B para probar el acceso en el otro sentido.",
-        "editor",
-        "Ver el archivo abierto"
-      ],
-      [
-        "Reabre el archivo y comprueba los turnos",
-        "B ha guardado su frase y A ha guardado otra después. Reabrid el archivo y leed las dos aportaciones. Pulsa <b>Comprobar este paso</b>.",
-        "explorer",
-        "Volver al archivo desde el Explorador"
-      ]
-    ]
-  },
-  {
-    "goal": "Intercambiar carpetas, distinguir una copia local del original y usar una impresora compartida.",
-    "expected": "Habrá dos portátiles compartiendo, una copia local que no cambia al editar el original y una página de prueba recibida.",
-    "help": "Todos escriben al menos una vez en un recurso ajeno. Para comparar la copia, el compañero cambia y guarda el original DESPUÉS de copiarlo. Una copia no se actualiza como el archivo compartido.",
-    "steps": [
-      [
-        "B crea y comparte su propia carpeta",
-        "Ahora B hace <b>Explorador → Documentos → Nueva carpeta</b>, la llama <code>Carpeta_B</code> y la comparte con <b>Lectura y escritura</b> desde <b>Compartir y permisos</b>.",
-        "documents",
-        "Abrir Documentos para crear mi carpeta"
-      ],
-      [
-        "A accede al portátil de B",
-        "En su pantalla, A abre <b>Explorador → Red → portátil de B → Carpeta_B</b>. Está accediendo a otro recurso, ofrecido por otro ordenador.",
-        "network",
-        "Buscar el portátil del compañero"
-      ],
-      [
-        "A crea y guarda una aportación remota",
-        "Dentro de <code>Carpeta_B</code>, A pulsa <b>Nuevo archivo de texto</b>, acepta un nombre terminado en .txt, escribe una frase y pulsa <b>Guardar</b>. B lo comprueba desde su carpeta.",
-        "explorer",
-        "Volver a la carpeta abierta"
-      ],
-      [
-        "Comprueba la participación",
-        "C, D y E, si los hay, guardan una frase en el archivo de A. A debe haber guardado en la carpeta de B. Así todos han escrito en un ordenador ajeno.",
-        "members",
-        "Ver los integrantes"
-      ],
-      [
-        "B guarda una copia en su portátil",
-        "B abre <b>Red → portátil de A → Equipo_X49</b>. Junto al archivo, pulsa <b>Copiar a mi portátil</b>. Deja <b>Crear carpeta Copias_X49</b> y el nombre <code>Copia_Equipo_X49.txt</code>. Pulsa <b>Guardar copia en mi portátil</b>: se abrirá su carpeta local.",
-        "network",
-        "Abrir el archivo compartido para copiarlo"
-      ],
-      [
-        "A cambia el original compartido",
-        "Sin tocar la copia de B, A abre el archivo original de su carpeta, añade «Este cambio está solo en el original» y pulsa <b>Guardar</b>. B conserva abierta su carpeta <b>Copias_X49</b>.",
-        "explorer",
-        "Abrir el Explorador"
-      ],
-      [
-        "B compara los dos archivos",
-        "En su carpeta <b>Copias_X49</b>, B pulsa <b>Comparar con original</b> junto a su copia. Verá los dos textos: la frase nueva estará solo en el original. Lee el aviso y cierra la comparación.",
-        "documents",
-        "Abrir mis Documentos para buscar la copia"
-      ],
-      [
-        "Probad la impresora de otro portátil",
-        "Abre <b>Impresoras</b>, en el escritorio. Busca la fila del portátil de A y pulsa su <b>Página de prueba</b>. Lee el aviso de recepción y ciérralo.",
-        "printer",
-        "Abrir las impresoras compartidas"
-      ],
-      [
-        "Comprueba el intercambio",
-        "Cuando haya dos portátiles compartiendo, todos hayan guardado en una carpeta ajena, se haya comparado la copia con el original ya modificado y llegue la impresión, pulsa <b>Comprobar este paso</b>.",
+        "Comprobad que nadie queda fuera",
+        "En el seguimiento de participación, todos deben tener registrada su parte. Cuando cada compañero haya abierto el recurso, pulsa <b>Comprobar este paso</b>.",
         "members",
         "Ver el grupo"
       ]
     ]
   },
   {
-    "goal": "Provocar una interrupción, recuperarse y generar el PDF común del grupo.",
-    "expected": "Con A apagado, B no podrá abrir su carpeta. Después de encenderlo, el recurso volverá a estar disponible. El PDF recogerá los nombres de todo el grupo.",
-    "help": "Usad únicamente Inicio → Apagar portátil dentro del escritorio simulado. Guardad el texto antes. No apaguéis el ordenador real ni cerréis esta web.",
+    "goal": "Que todos prueben la lectura y comprendan cuándo se puede guardar en un recurso ajeno.",
+    "expected": "Todos los compañeros han recibido la denegación de Guardar y la primera carpeta termina compartida con escritura.",
+    "help": "El propietario siempre puede guardar en su carpeta. La denegación deben probarla todos los demás desde sus propios portátiles, antes de cambiar el permiso.",
     "steps": [
       [
-        "Guardad primero y elegid qué equipo se apaga",
-        "Aseguraos de que los archivos están guardados. Elegid el portátil que ofrece la carpeta inicial: A lo apagará virtualmente y B intentará entrar desde el suyo.",
+        "Todos los demás prueban Guardar",
+        "Cada persona excepto <b>{{creator}}</b> abre el archivo inicial por Red y pulsa <b>Guardar</b>. Aunque el texto esté bloqueado, este botón permite comprobar el permiso.",
+        "network",
+        "Abrir el archivo inicial"
+      ],
+      [
+        "Cada uno lee su aviso",
+        "Cada compañero debe obtener <b>Acceso denegado: el recurso solo permite lectura</b>. Esperad a que todos hayan realizado su intento antes de cambiar los permisos.",
+        "editor",
+        "Ver Bloc de notas"
+      ],
+      [
+        "Quien creó el recurso concede escritura",
+        "Cuando todos hayan probado, <b>{{creator}}</b> abre su carpeta en el Explorador → <b>Compartir y permisos</b>, elige <b>Lectura y escritura</b> y pulsa <b>Aplicar permisos</b>.",
         "explorer",
-        "Volver al Explorador"
+        "Revisar los permisos"
       ],
       [
-        "A apaga su portátil virtual",
-        "Después de guardar, A pulsa el botón <b>Inicio</b> (cuatro cuadrados azules, en la barra inferior) y después <b>Apagar portátil</b>. Verá la pantalla de equipo apagado.",
-        "start",
-        "Abrir el menú Inicio"
-      ],
-      [
-        "B prueba el acceso durante la interrupción",
-        "Sin esperar a que A lo encienda, B abre <b>Explorador → Red → portátil de A → su carpeta</b>. Debe obtener un aviso de que el equipo está apagado o desconectado. Si ya la tenía abierta, pulsa <b>Actualizar</b>.",
+        "Todos vuelven a abrir el archivo",
+        "Cada compañero vuelve al Explorador y abre de nuevo el mismo archivo. Ahora se podrá escribir. Todavía no escribáis todos a la vez: la siguiente ronda va por turnos.",
         "network",
-        "Intentar abrir el recurso de A"
+        "Abrir el recurso con escritura"
       ],
       [
-        "A enciende y B comprueba la recuperación",
-        "A pulsa <b>Encender portátil</b> en la pantalla oscura. Después B vuelve a abrir la carpeta. Si habéis desconectado solo el wifi, A vuelve al icono wifi, selecciona X49 e introduce la clave.",
+        "Comprobad el permiso del grupo",
+        "Cuando todos hayan recibido la denegación y el propietario haya concedido escritura, pulsa <b>Comprobar este paso</b>.",
         "members",
-        "Ver si todos vuelven a estar conectados"
-      ],
+        "Ver la participación"
+      ]
+    ]
+  },
+  {
+    "goal": "Que cada compañero edite el mismo archivo por turnos y quien lo creó responda al final.",
+    "expected": "El primer archivo contiene una aportación de cada compañero y una respuesta final de su propietario.",
+    "help": "Seguid el orden indicado. Antes de escribir, comprobad que veis la última versión. Guardad y avisad al siguiente. Si aparece un conflicto, el borrador se conserva: copiad la aportación antes de cargar la última versión.",
+    "steps": [
       [
-        "Comprueba la recuperación",
-        "Todos deben volver a indicar <b>Conectado</b>. B vuelve a abrir la carpeta de A y comprueba que el archivo sigue allí. Pulsa <b>Comprobar este paso</b>.",
+        "Preparad el archivo inicial",
+        "Todos abrirán el archivo de <b>{{creator_pc}}</b>. La persona que creó el recurso espera mientras los demás escriben, uno a uno. El orden del grupo es <b>{{order}}</b>.",
         "network",
-        "Abrir Red para comprobar el acceso"
+        "Buscar el archivo compartido"
       ],
       [
-        "Responded juntos y descargad el PDF",
-        "Pulsa <b>Responder preguntas finales</b>. Acordad cada respuesta del test. Una persona marca una opción por pregunta y pulsa <b>Guardar respuestas del grupo</b>. Después descargad el PDF común y entregadlo por Classroom.",
+        "Turno de cada compañero",
+        "Cada integrante excepto quien creó la sala añade su frase al mismo archivo y guarda antes de que empiece el siguiente.",
+        "network",
+        "Abrir el archivo inicial"
+      ],
+      [
+        "Quien creó el archivo responde al final",
+        "Después de la aportación de <b>todos</b> los compañeros, <b>{{creator}}</b> lee el resultado, añade una respuesta final y pulsa <b>Guardar</b>.",
+        "editor",
+        "Volver a Bloc de notas"
+      ],
+      [
+        "Todos leen el resultado",
+        "Cada persona comprueba que ve todas las frases en el archivo original. Los cambios llegan al guardar; el número de versión aumenta. Pulsa <b>Comprobar este paso</b>.",
+        "explorer",
+        "Ver el archivo y su versión"
+      ]
+    ]
+  },
+  {
+    "goal": "Que todos ofrezcan archivos y prueben el intercambio, las copias y la impresión.",
+    "expected": "Cada integrante tiene un recurso compartido, ha editado uno ajeno, ha comparado una copia local y ha impreso en otro portátil.",
+    "help": "Cada persona trabaja con el siguiente integrante de la lista. El último trabaja con quien creó el grupo. Primero terminad todos las copias; después cada propietario cambia su original, y por último todos comparan. No compartáis Copias_X49: es vuestra copia local.",
+    "steps": [
+      [
+        "Ahora todos tienen su propia carpeta y archivo",
+        "Quien creó la sala conserva su recurso inicial. <b>Todos los demás</b> abren <b>Documentos → Nueva carpeta</b>, por ejemplo <code>{{own_folder}}</code>. Dentro crean <code>{{own_file}}</code>, escriben una frase y pulsan <b>Guardar</b>.",
+        "documents",
+        "Crear mi recurso"
+      ],
+      [
+        "Todos comparten con escritura",
+        "Cada propietario abre <b>Compartir y permisos</b>, marca la carpeta como compartida y aplica <b>Lectura y escritura</b>. Esperad a que todo el mundo tenga su carpeta y archivo preparados.",
+        "explorer",
+        "Compartir mi carpeta"
+      ],
+      [
+        "Cada uno escribe en el siguiente portátil",
+        "En tu caso, abre <b>Red → {{target_pc}}</b>, de <b>{{target}}</b>, entra en su carpeta compartida y abre su archivo. Añade una frase con tu nombre y pulsa <b>Guardar</b>. Quien creó el grupo también hace esta tarea.",
+        "network",
+        "Abrir el portátil de mi compañero"
+      ],
+      [
+        "Cada propietario comprueba la aportación recibida",
+        "Vuelve a tu propia carpeta y abre tu archivo. Debe contener una frase de <b>{{observer}}</b>. Así todos han ofrecido un recurso y también han utilizado el de otro ordenador.",
+        "documents",
+        "Revisar mi archivo"
+      ],
+      [
+        "Todos guardan una copia del archivo ajeno",
+        "Abre otra vez el archivo del portátil <b>{{target_pc}}</b>, desde el Explorador. Junto al archivo pulsa <b>Copiar a mi portátil</b>. Deja <b>Crear carpeta Copias_X49</b>, conserva el nombre propuesto y pulsa <b>Guardar copia en mi portátil</b>.",
+        "network",
+        "Buscar el archivo para copiarlo"
+      ],
+      [
+        "Esperad a que todos tengan su copia",
+        "Antes de cambiar los originales, cada integrante confirma que ve su archivo en <b>Documentos → Copias_X49</b>. Las copias son archivos independientes.",
+        "documents",
+        "Ver mi copia local"
+      ],
+      [
+        "Todos cambian su propio original",
+        "Cada persona abre <b>su carpeta compartida original</b>, añade una línea como «Cambio posterior a la copia» y pulsa <b>Guardar</b>. No edites el archivo que está en Copias_X49.",
+        "documents",
+        "Abrir mi carpeta original"
+      ],
+      [
+        "Todos comparan la copia con el original",
+        "En tu portátil abre <b>Documentos → Copias_X49</b>. Pulsa <b>Comparar con original</b>. La frase nueva de <b>{{target}}</b> debe aparecer solo en el original. Si siguen iguales, espera a que esa persona guarde y compara de nuevo.",
+        "documents",
+        "Comparar mi copia"
+      ],
+      [
+        "Todos imprimen en otro portátil",
+        "Abre <b>Impresoras</b>. En la fila de <b>{{target_pc}}</b>, de <b>{{target}}</b>, pulsa <b>Página de prueba</b>. Lee la confirmación y ciérrala.",
+        "printer",
+        "Probar la impresora compartida"
+      ],
+      [
+        "Comprobad que todos han participado",
+        "Cada integrante debe tener su carpeta y archivo compartidos, una edición enviada y otra recibida, una copia comparada tras el cambio del original y una impresión remota. Pulsa <b>Comprobar este paso</b>.",
+        "members",
+        "Ver qué falta a cada persona"
+      ]
+    ]
+  },
+  {
+    "goal": "Apagar y recuperar los portátiles por turnos, y generar el PDF común.",
+    "expected": "Cada portátil se ha apagado y recuperado mientras otro integrante comprobaba que su carpeta dejaba de estar accesible.",
+    "help": "Se apaga un solo portátil virtual cada vez. La persona anterior en el orden prueba su carpeta mientras está apagado. Después se enciende y se pasa al siguiente. Guardad antes de apagar; no cerréis la web ni apaguéis el equipo real.",
+    "steps": [
+      [
+        "Preparad la ronda de apagado",
+        "Guardad los archivos. El orden es <b>{{order}}</b>. En tu turno apagarás tu portátil y <b>{{observer}}</b> intentará abrir tu carpeta. Tú comprobarás la carpeta de <b>{{target}}</b> cuando le toque apagarse.",
+        "members",
+        "Ver el orden y los compañeros"
+      ],
+      [
+        "Cada persona apaga su portátil cuando le toca",
+        "En tu turno pulsa <b>Inicio → Apagar portátil</b> dentro del escritorio simulado. Espera con la pantalla oscura mientras tu compañero intenta entrar. No pulses todavía Encender portátil.",
+        "start",
+        "Abrir Inicio"
+      ],
+      [
+        "El compañero prueba la carpeta durante el apagado",
+        "Cuando <b>{{target}}</b> tenga su portátil apagado, entra en <b>Red → {{target_pc}} → su carpeta compartida</b>. Pulsa la carpeta o <b>Actualizar</b> si ya estaba abierta. Debe aparecer un aviso de equipo apagado o desconectado.",
+        "network",
+        "Probar el recurso durante el apagado"
+      ],
+      [
+        "El propietario enciende y se continúa la ronda",
+        "Después del intento de acceso, el propietario pulsa <b>Encender portátil</b>. Comprobad que vuelve a estar conectado y que su carpeta abre. Entonces empieza el siguiente turno. Repetid hasta que todos hayan apagado y recuperado su portátil.",
+        "members",
+        "Revisar la recuperación"
+      ],
+      [
+        "Comprobad la ronda completa",
+        "Cada integrante debe haber apagado su portátil, recibido el intento de acceso del compañero y vuelto a encenderlo. Todos terminan conectados. Pulsa <b>Comprobar este paso</b>.",
+        "members",
+        "Ver los turnos completados"
+      ],
+      [
+        "Responded el test y descargad el PDF común",
+        "Pulsa <b>Preguntas finales y PDF</b>. Acordad las siete respuestas. Una persona marca las opciones, pulsa <b>Guardar respuestas del grupo</b> y descarga el PDF común para entregarlo por Classroom.",
         "class-review",
-        "Ir a las preguntas finales"
+        "Ir al test final"
       ]
     ]
   }
