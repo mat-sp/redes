@@ -1,0 +1,45 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {Miniflare,convertV4MiniflareOptions} from 'miniflare';
+import {createRequire} from 'node:module';
+import {webcrypto,randomBytes} from 'node:crypto';
+import {mkdtemp,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+const require=createRequire(import.meta.url);globalThis.RedLab=require('../docs/laboratorio/engine.js');const {CloudflareStore,Session}=require('../docs/classroom.js');globalThis.localStorage={setItem(){}};
+const bundle=await build({entryPoints:[new URL('../cloudflare/worker.mjs',import.meta.url).pathname],bundle:true,write:false,format:'esm',platform:'browser',external:['cloudflare:workers'],logLevel:'silent'});
+const persistence=await mkdtemp(join(tmpdir(),'redlab-do-'));
+const options={name:'redlab-test',modules:true,script:bundle.outputFiles[0].text,compatibilityDate:'2026-10-30',durableObjects:{ROOMS:{className:'RedLabRoom',useSQLite:true}},durableObjectsPersist:persistence,bindings:{ALLOWED_ORIGINS:'https://mat-sp.github.io'}};
+let mf=new Miniflare({...convertV4MiniflareOptions(options),resourcePersistencePath:persistence}),stores=[],count=0;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function until(fn){let end=Date.now()+3000;while(!fn()){if(Date.now()>end)throw Error('No llegó la actualización en directo.');await sleep(10);}}
+class WireSocket extends EventTarget{
+ constructor(url){super();this.readyState=0;this.boot(url);}
+ async boot(url){try{let response=await mf.dispatchFetch(url.replace(/^ws/,'http'),{headers:{Upgrade:'websocket',Origin:'https://mat-sp.github.io'}});if(response.status!==101)throw Error(await response.text());let ws=response.webSocket;this.ws=ws;ws.accept();ws.addEventListener('message',e=>this.dispatchEvent(new MessageEvent('message',{data:e.data})));ws.addEventListener('close',()=>{this.readyState=3;this.dispatchEvent(new Event('close'));});ws.addEventListener('error',()=>this.dispatchEvent(new Event('error')));this.readyState=1;this.dispatchEvent(new Event('open'));}catch(e){this.error=e;this.readyState=3;this.dispatchEvent(new Event('error'));this.dispatchEvent(new Event('close'));}}
+ send(text){this.ws.send(text);}
+ close(code=1000,reason=''){if(this.readyState===3)return;this.readyState=2;this.ws?.close(code,reason);}
+}
+globalThis.WebSocket=WireSocket;
+async function makeStore(token=randomBytes(32).toString('hex')){let hash=await webcrypto.subtle.digest('SHA-256',new TextEncoder().encode(token));let uid=Buffer.from(hash).toString('hex').slice(0,40),s=new CloudflareStore('https://redlab.test',token,uid);stores.push(s);return s;}
+async function test(name,fn){await fn();count++;console.log('✓ '+name);}
+try{
+ await mf.ready;
+ await test('La identidad compatible con vista previa HTTP coincide con SHA-256 del servidor',async()=>{require('../docs/vendor/identity-hash.js');let token='a'.repeat(64),expected=await webcrypto.subtle.digest('SHA-256',new TextEncoder().encode(token));assert.equal(Buffer.from(globalThis.redlabIdentityDigest(token)).toString('hex'),Buffer.from(expected).toString('hex'));});
+ let aStore=await makeStore(),bStore=await makeStore(),a=new Session(aStore,'Ana Prueba',()=>{}),b=new Session(bStore,'Bruno Prueba',()=>{}),room,fid,file;
+ await test('Worker local, SQLite y WebSocket: crear sala y unir dos ordenadores',async()=>{room=await a.create();await b.join(room);await until(()=>a.peers().length===2);assert.match(room,/^[A-HJ-NP-Z2-9]{5}$/);assert.notEqual(a.uid,b.uid);assert.equal(a.seat,1);assert.equal(b.seat,2);});
+ await test('Rechaza dominios ajenos y lecturas sin pertenecer al grupo',async()=>{let response=await mf.dispatchFetch('https://redlab.test/api/rooms/'+room+'/ws',{headers:{Upgrade:'websocket',Origin:'https://otro.test'}});assert.equal(response.status,403);let stranger=await makeStore();await assert.rejects(()=>stranger.get('rooms/'+room),/Entra primero/);stranger.stopRoom();});
+ await test('La autoridad del servidor impide modificar otro portátil',async()=>{await assert.rejects(()=>bStore.set('rooms/'+room+'/computers/'+a.uid,a.me()),/propio portátil/);for(let s of [a,b])await s.configure({ssid:'X49',key:'AulaX49!'});await until(()=>a.peers().every(p=>p.net.connected));});
+ await test('Carpeta privada y solo lectura se comprueban en el servidor',async()=>{fid=await a.createFolder('Equipo');file=await a.saveFile(fid,null,'Equipo.txt','Primera versión',0);await assert.rejects(()=>bStore.get('contents/'+room+'/'+fid),/no está compartida/);await a.share(fid,true,'read');assert.equal((await b.readFiles(fid))[file.id].text,'Primera versión');await assert.rejects(()=>bStore.transact('contents/'+room+'/'+fid+'/'+file.id,old=>({...old,text:'No permitido',revision:2})),/solo permite lectura/);await assert.rejects(()=>bStore.set('catalog/'+room+'/'+fid,{...b.catalog[fid],owner:b.uid,permission:'write'}),/propietario/);});
+ let pushed=null,unwatch;
+ await test('Guardar envía archivo y test a los demás sin consultas periódicas',async()=>{await a.share(fid,true,'write');unwatch=a.watchFiles(fid,value=>pushed=value);await until(()=>pushed?.[file.id]);await b.saveFile(fid,file.id,'Equipo.txt','Aportación de Bruno',1);await until(()=>pushed?.[file.id]?.text==='Aportación de Bruno');await b.answer(0,'test-v1:C');await until(()=>a.data.answers?.[0]?.text==='test-v1:C');assert.equal(a.data.answers[0].by,'Bruno Prueba');});
+ await test('Un guardado antiguo no sobrescribe la última versión',async()=>{await assert.rejects(()=>b.saveFile(fid,file.id,'Equipo.txt','Antiguo',1),/versión más reciente/);assert.equal((await a.readFiles(fid))[file.id].revision,2);});
+ await test('Dos guardados concurrentes de la misma revisión: solo se acepta uno',async()=>{let r=await Promise.allSettled([a.saveFile(fid,file.id,'Equipo.txt','Desde Ana',2),b.saveFile(fid,file.id,'Equipo.txt','Desde Bruno',2)]);assert.equal(r.filter(x=>x.status==='fulfilled').length,1);assert.equal((await a.readFiles(fid))[file.id].revision,3);});
+ await test('Dos creaciones concurrentes no duplican el mismo nombre',async()=>{let r=await Promise.allSettled([a.saveFile(fid,null,'Nuevo.txt','Ana',0),b.saveFile(fid,null,'Nuevo.txt','Bruno',0)]);assert.equal(r.filter(x=>x.status==='fulfilled').length,1);});
+ await test('La copia local es privada y conserva su texto tras editar el original por WebSocket',async()=>{let dest=await b.createFolder('Copias_X49'),copy=await b.copyFile(fid,file.id,dest,'Copia.txt');await assert.rejects(()=>aStore.get('contents/'+room+'/'+dest),/no está compartida/);let evidence=Object.values(b.data.events).find(e=>e.type==='copy'&&e.toFile===copy.id);assert.equal((await b.compareCopy(evidence)).different,false);await a.saveFile(fid,file.id,'Equipo.txt','Original modificado después de copiar',3);assert((await b.compareCopy(evidence)).different);assert.equal((await b.readFiles(dest))[copy.id].text,copy.text);});
+ await test('Apagado y recuperación revocan y restauran el acceso remoto',async()=>{await a.configure({power:false});await assert.rejects(()=>bStore.get('contents/'+room+'/'+fid),/apagado|desconectado/);await a.configure({power:true});assert.equal((await b.readFiles(fid))[file.id].revision,4);});
+ await test('La desconexión informa de ausencia y conserva el puesto al reconectar',async()=>{let token=bStore.token;b.close();await until(()=>a.data.computers[b.uid]?.config.online===false);bStore=await makeStore(token);b=new Session(bStore,'Bruno Prueba',()=>{});await b.join(room);await until(()=>a.data.computers[b.uid]?.config.online===true);assert.equal(b.seat,2);assert.equal((await b.readFiles(fid))[file.id].revision,4);});
+ await test('La reconexión automática recupera las suscripciones sin volver a entrar',async()=>{let previous=bStore.socket;previous.ws.close(4001,'Prueba de reconexión');await until(()=>bStore.socket!==previous&&bStore.status==='connected');await a.answer(1,'test-v1:A');await until(()=>b.data.answers?.[1]?.text==='test-v1:A');assert.equal((await b.readFiles(fid))[file.id].revision,4);});
+ await test('Cinco puestos se asignan atómicamente; se rechaza el sexto',async()=>{for(let i=3;i<=5;i++){let s=new Session(await makeStore(),'Alumno '+i,()=>{});await s.join(room);}let sixth=new Session(await makeStore(),'Sexto Alumno',()=>{});await assert.rejects(()=>sixth.join(room),/cinco/);});
+ await test('SQLite conserva archivos y test tras reiniciar el servicio',async()=>{let token=aStore.token;unwatch();for(let s of stores)s.stopRoom();await sleep(100);await mf.dispose();mf=new Miniflare({...convertV4MiniflareOptions(options),resourcePersistencePath:persistence});await mf.ready;aStore=await makeStore(token);let again=new Session(aStore,'Ana Prueba',()=>{});await again.join(room);assert.equal(again.seat,1);assert.equal((await again.readFiles(fid))[file.id].revision,4);assert.equal(again.data.answers[0].text,'test-v1:C');});
+ console.log(count+' pruebas de Cloudflare con WebSocket y SQLite completadas.');
+}finally{for(let s of stores)s.stopRoom();await mf.dispose();await rm(persistence,{recursive:true,force:true});}
